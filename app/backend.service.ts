@@ -30,7 +30,7 @@ export class Backend {
     }
 
     saveCheck(c: Check) {
-        var url = c.id ? '/api/checks/'+c.id : '/api/checks';
+        var url = c.id ? 'api/checks/'+c.id : 'api/checks';
         var method = c.id ? RequestMethod.Patch : RequestMethod.Post;
         var headers = new Headers({'Content-Type': 'application/json'});
         var body = JSON.stringify(c);
@@ -39,7 +39,7 @@ export class Backend {
     }
 
     removeCheck(c: Check) {
-        var url = '/api/checks/'+c.id;
+        var url = 'api/checks/'+c.id;
         var method = RequestMethod.Delete;
         return c.id ? this._http.request(url, {method: method})
             .map(res => [res.ok, res.statusText]) : new ScalarObservable([true, 'OK']);
@@ -51,7 +51,7 @@ export class Backend {
     }
 
     graphData(c: Check) {
-        var url = '/api/graph_data?q=' + encodeURIComponent(c.query) +
+        var url = 'api/graph_data?q=' + encodeURIComponent(c.query) +
             '&data_source=' + encodeURIComponent(c.dataSource);
         return this._http.get(url).map(res => <Serie[]>res.json());
     }
