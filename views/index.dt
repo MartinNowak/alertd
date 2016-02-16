@@ -1,0 +1,23 @@
+!!! 5
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title alert\'d
+    - debug
+      link(rel="stylesheet", href="node_modules/skeleton-css/css/normalize.css")
+      link(rel="stylesheet", href="node_modules/skeleton-css/css/skeleton.css")
+      link(rel="stylesheet", href="fonts/raleway.css")
+    - else
+      link(rel="stylesheet", href="app.min.css")
+
+  body
+    app.container(style="display: block")
+    span#init-data(style="display: none")= initData
+
+    - debug
+      script(src="build/vendor.js")
+      script(src="build/bundle.js")
+      script(src="node_modules/highcharts/highcharts.js")
+    - else
+      script(src="app.min.js")

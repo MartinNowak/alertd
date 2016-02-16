@@ -1,0 +1,30 @@
+{
+  "name": "alertd",
+  "version": "0.2.0",
+  "description": "Alerting system for graphite",
+  "scripts": {
+    "start": "webpack-dev-server --inline --colors --progress --display-error-details --display-cached --port 8080 --content-base .",
+    "build": "./node_modules/.bin/webpack -b"
+  },
+  "author": "Martin Nowak",
+  "license": "ISC",
+  "dependencies": {
+    "angular2": "2.0.0-beta.0",
+    "es6-promise": "3.0.2",
+    "es6-shim": "0.33.3",
+    "highcharts": "^4.2.1",
+    "ng2-highcharts": "^0.1.2",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "skeleton-css": "^2.0.4",
+    "zone.js": "0.5.10"
+  },
+  "devDependencies": {
+    "raw-loader": "^0.5.1",
+    "ts-loader": "^0.7.2",
+    "typescript": "^1.7.3",
+    "webpack": "^1.12.10",
+    "webpack-dev-server": "^1.14.0",
+    "yuglify": "^0.1.4"
+  }
+}

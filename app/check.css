@@ -1,0 +1,22 @@
+.bar {
+    background: #EEE;
+    text-align: center;
+    font-size: 1rem;
+    text-transform: uppercase;
+    height: 4em;
+    line-height: 4em;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    cursor: pointer;
+
+}
+
+check-details {
+    display: block;
+    border: 2px #EEE solid;
+    border-top: 0px;
+    padding: 1em;
+}
+
+.error { background-color: #D9534F }
+.ok { background-color: #5CB85C }

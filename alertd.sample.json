@@ -1,0 +1,51 @@
+{
+  "#": "keys starting with # are comments",
+
+  "data_sources": [
+    {
+      "type": "graphite",
+      "url": "https://USER:PASSWORD@host/path/"
+    },
+    {
+      "type": "graphite",
+      "#": "The name is optional and defaults to type.",
+      "name": "graphite2",
+      "url": "https://USER:PASSWORD@host/path/"
+    }
+  ],
+
+  "notification_channels": [
+    {
+      "name": "mailto",
+      "#": "The following environment variables are available NAME, SUBJECT, MESSAGE, DATA_SOURCE, QUERY, THRESHOLD, SERIE, and VALUE.",
+      "#": "RECIPIENT is configured per subscription",
+      "#": "MESSAGE is also piped via stdin",
+      "command": "mail -s \"$SUBJECT\" \"$RECIPIENT\""
+    },
+    {
+      "name": "slack",
+      "command": "curl -fsS --header 'Content-type: application/json' --data \"{\\\"text\\\": \\\"$MESSAGE\\\"}\" \"$RECIPIENT\""
+    }
+  ],
+
+  "#": "The subject and message templates.",
+  "#": "All variables except for SUBJECT, MESSAGE, and RECIPIENT are available.",
+  "subject_template": "$NAME check failed for $SERIE",
+  "message_template": "$SUBJECT: value $VALUE > threshold $THRESHOLD.\n$DATA_SOURCE: $QUERY\n",
+
+  "#": "stdout_stderr with level info is default",
+  "#logger": {
+    "destination": "stdout_stderr",
+  },
+  "#logger": {
+    "destination": "file",
+    "path": "alertd.log",
+    "#": "level can be diagnostic, info, warn, error, critical, or fatal",
+    "level": "diagnostic",
+  },
+  "#logger": {
+    "destination": "syslog",
+    "facility": "user",
+    "level": "warn"
+  }
+}

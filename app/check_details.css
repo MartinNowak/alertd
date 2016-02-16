@@ -1,0 +1,39 @@
+highcharts {
+    display: block;
+    display: block;
+}
+
+input[type="range"] {
+    -webkit-appearance: slider-vertical;
+}
+
+.flex {
+    display: flex;
+}
+
+.chart-wrapper {
+    height: 40rem
+}
+
+.chart {
+    flex: 1 0 90%;
+}
+
+.chart-controls {
+    flex: 0 1 10%;
+    flex-direction: column;
+}
+
+.chart-controls input[type="range"] {
+    flex: 1 0 80%;
+}
+
+.chart-controls input[type="number"]::-webkit-outer-spin-button,
+.chart-controls input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.chart-controls input[type="number"] {
+    -moz-appearance: textfield;
+    max-width: 4em;
+}
