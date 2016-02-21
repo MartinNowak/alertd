@@ -38,6 +38,11 @@ export class Ng2Highcharts2 {
         this.minMaxChange.emit([extremes.min, extremes.max]);
     }
 
+    @Input() set msg(msg: string) {
+        if (msg.length)
+            this.chart.showLoading(msg);
+    }
+
     @Input() set threshold(value: number) {
         if (!value) return;
         if (!this.chart) return;
@@ -91,6 +96,7 @@ class CheckDetails {
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
 
     chartData: HighchartsIndividualSeriesOptions[];
+    msg: string = '';
     min: number;
     max: number;
     chartOptions: HighchartsOptions = {
@@ -158,15 +164,25 @@ class CheckDetails {
 
     private reloadData(): void {
         this._backend.graphData(this.check)
-            .subscribe(series => this.updateGraph(series));
+            .subscribe(
+                series => this.updateGraph(series),
+                error => { this.msg = <any>error; this.markDirty(); });
     }
 
     private updateGraph(series: Serie[]) {
-        if (!series.length) return;
+        if (!series.length) {
+            this.msg = 'No result';
+            return;
+        }
+        this.msg = '';
         // prevent slider from saturating value
         this.min = this.max = this.check.threshold;
         this.chartData = series;
         this.markDirty();
+    }
+
+    private loadError(error: string) {
+        console.log(error);
     }
 
     private minMaxChange(minmax: [number, number]) {

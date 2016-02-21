@@ -11,7 +11,7 @@
     <input class="ten columns" type="text" [ngModel]="check.query" (ngModelChange)="updateQuery($event)">
   </div>
   <div class="flex">
-    <highcharts #h class="chart chart-wrapper" [options]="chartOptions" [data]="chartData" [threshold]="check.threshold"
+    <highcharts #h class="chart chart-wrapper" [options]="chartOptions" [data]="chartData" [threshold]="check.threshold" [msg]="msg"
                 (minMaxChange)="minMaxChange($event)">
     </highcharts>
     <div class="flex chart-controls">

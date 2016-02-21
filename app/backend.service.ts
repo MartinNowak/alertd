@@ -1,6 +1,9 @@
 import {Injectable} from 'angular2/src/core/di';
 import {Headers, Http, RequestMethod} from 'angular2/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import {Observable} from 'rxjs/Observable';
 import {ScalarObservable} from 'rxjs/observable/ScalarObservable';
 
 export interface Check {
@@ -53,6 +56,7 @@ export class Backend {
     graphData(c: Check) {
         var url = 'api/graph_data?q=' + encodeURIComponent(c.query) +
             '&data_source=' + encodeURIComponent(c.dataSource);
-        return this._http.get(url).map(res => <Serie[]>res.json());
+        return this._http.get(url).map(res => <Serie[]>res.json())
+            .catch(res => Observable.throw(res.json().error || 'Database error'));
     }
 }
