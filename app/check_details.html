@@ -12,7 +12,7 @@
   </div>
   <div class="flex">
     <highcharts #h class="chart chart-wrapper" [options]="chartOptions" [data]="chartData" [threshold]="check.threshold"
-                (minChange)="min = $event" (maxChange)="max = $event">
+                (minMaxChange)="minMaxChange($event)">
     </highcharts>
     <div class="flex chart-controls">
       <input type="range"

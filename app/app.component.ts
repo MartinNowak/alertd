@@ -35,8 +35,7 @@ export class Ng2Highcharts2 {
         this.chart.hideLoading();
 
         var extremes = this.chart.yAxis[0].getExtremes();
-        this.minChange.emit(extremes.min);
-        this.maxChange.emit(extremes.max);
+        this.minMaxChange.emit([extremes.min, extremes.max]);
     }
 
     @Input() set threshold(value: number) {
@@ -51,8 +50,7 @@ export class Ng2Highcharts2 {
         });
     }
 
-    @Output() minChange: EventEmitter<number> = new EventEmitter();
-    @Output() maxChange: EventEmitter<number> = new EventEmitter();
+    @Output() minMaxChange: EventEmitter<[number, number]> = new EventEmitter();
 
     private chart: HighchartsChartObject;
 }
@@ -165,6 +163,11 @@ class CheckDetails {
         this.min = this.max = this.check.threshold;
         this.chartData = series;
         this.markDirty();
+    }
+
+    private minMaxChange(minmax: [number, number]) {
+        this.min = minmax[0];
+        this.max = minmax[1];
     }
 
     private /*static*/ toFloat(val: string, digits: number): number {
