@@ -148,6 +148,10 @@ class CheckDetails {
         return dataSources;
     }
 
+    ngOnInit() {
+        this.check.threshold = parseFloat(this.check.threshold.toFixed(1));
+    }
+
     ngOnChanges() {
         this.reloadData();
     }
