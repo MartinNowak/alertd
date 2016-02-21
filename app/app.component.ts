@@ -12,6 +12,10 @@ import 'ng2-highcharts/ng2-highcharts'
 })
 export class Ng2Highcharts2 {
 
+    // http://api.highcharts.com/highcharts#colors
+    const colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9',
+                    '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
+
     constructor(private _ele: ElementRef) {}
 
     @Input() set options(opt: HighchartsOptions) {
@@ -29,8 +33,10 @@ export class Ng2Highcharts2 {
         const redraw = true;
         while (this.chart.series.length)
             this.chart.series[0].remove(!redraw);
-        for (var i = 0; i < data.length; ++i)
+        for (var i = 0; i < data.length; ++i) {
+            data[i].color = colors[i % colors.length];
             this.chart.addSeries(data[i], !redraw, false);
+        }
         this.chart.redraw();
         this.chart.hideLoading();
 
