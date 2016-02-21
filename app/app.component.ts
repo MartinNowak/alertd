@@ -196,9 +196,9 @@ class CheckDetails {
     styles: [require('./check.css')],
     template: `
         <div class="bar row" (click)="toggleSelect.emit(check)">
-          <div class="two columns" [ngClass]="{error: check.state == 'error', ok: check.state == 'ok'}">{{check.state}}</div>
-          <div class="three columns">{{check.name}}</div>
-          <div class="one column u-pull-right error" (click)="remove($event)" title="remove">✖</div>
+          <div class="two columns text-align-center" [ngClass]="{error: check.state == 'error', ok: check.state == 'ok'}">{{check.state}}</div>
+          <div class="nine columns text-overflow-ellipsis">{{check.name}}</div>
+          <div class="one column text-align-center u-pull-right error" (click)="remove($event)" title="remove">✖</div>
         </div>
         <check-details *ngIf="selected" [check]="check" (saveCheck)="saveCheck.emit($event)"></check-details>
         `,
