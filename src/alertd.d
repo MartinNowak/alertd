@@ -510,13 +510,17 @@ private:
             "THRESHOLD" : c.threshold.to!string, "SERIE" : serie, "VALUE" : value.to!string,
         ];
         env["SUBJECT"] = expandVars(_subjectTemplate, env);
-        env["MESSAGE"] = expandVars(_messageTemplate, env);
+        auto msg = env["MESSAGE"] = expandVars(_messageTemplate, env);
+
+        foreach (key, ref val; env)
+            val = escapeShellVariable(val);
+
         foreach (sub; c.subscriptions.toRepresentation)
         {
             if (auto channel = sub.type in _channels)
             {
                 env["RECIPIENT"] = sub.value;
-                runCommand(*channel, env);
+                runCommand(*channel, msg, env);
             }
             else
             {
@@ -526,14 +530,14 @@ private:
         }
     }
 
-    void runCommand(string command, in string[string] env)
+    static void runCommand(string command, string message, in string[string] env)
     {
         import std.process;
 
         logInfo("Running %s with env %-(%s='%s'%| %).", command, env);
         enum redirect = Redirect.stdin | Redirect.stdout | Redirect.stderrToStdout;
         auto p = pipeShell(command, redirect, env, Config.newEnv);
-        p.stdin.write(env["MESSAGE"]);
+        p.stdin.write(message);
         p.stdin.close();
 
         auto dur = 1.msecs, total = 0.msecs;
@@ -599,4 +603,9 @@ private:
     Statements!Check _checks;
     Timer[int] _checkJobs;
     string _subjectTemplate, _messageTemplate;
+}
+
+string escapeShellVariable(string s)
+{
+    return s.replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t");
 }
