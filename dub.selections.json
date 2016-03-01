@@ -6,7 +6,7 @@
 		"openssl": "1.1.4+1.0.1g",
 		"botan": "1.12.4",
 		"memutils": "0.4.4",
-		"vibe-d": "0.7.27",
+		"vibe-d": "0.7.28",
 		"d2sqlite3": "0.9.7",
 		"libasync": "0.7.8",
 		"botan-math": "1.0.2"
