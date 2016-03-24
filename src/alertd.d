@@ -476,9 +476,13 @@ private:
         enforceHTTP(ds, HTTPStatus.notFound, "Unknown data source '" ~ dataSource ~ "'");
         foreach (serie; ds.query(query, 10.minutes))
         {
-            auto found = serie.data.find!(d => d[1] > threshold);
-            if (!found.empty)
-                return tuple(State.error, serie.name, found.front[1]);
+            for (auto data = serie.data.find!(d => d[1] > threshold); !data.empty;
+                    data = data.find!(d => d[1] > threshold))
+            {
+                data.popFront;
+                if (!data.empty && data.front[1] > threshold)
+                    return tuple(State.error, serie.name, data.front[1]);
+            }
         }
         return tuple(State.ok, "", 0.0f);
     }
