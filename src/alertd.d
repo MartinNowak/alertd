@@ -294,7 +294,7 @@ class Graphite : DataSource
                 "Failed to parse graphite response.\n" ~ line);
 
             immutable count = (end - beg) / step;
-            immutable chunkSize = maxDataPoints == -1 ? 1 : count / maxDataPoints;
+            immutable chunkSize = (maxDataPoints == -1 || maxDataPoints > count) ? 1 : count / maxDataPoints;
             s.data.length = count / chunkSize;
             size_t idx;
 
