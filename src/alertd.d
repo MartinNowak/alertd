@@ -266,8 +266,8 @@ class Graphite : DataSource
     {
         import std.uri : encodeComponent;
 
-        // add a 30s lag to avoid querying incomplete series
-        auto url = url ~ "/render?from=-" ~ (ago + 30.seconds).total!"seconds".to!string ~ "s&until=-30s&"
+        // add a 60s lag to avoid incorrect results for out-of-order collectd stats
+        auto url = url ~ "/render?from=-" ~ (ago + 1.minutes).total!"seconds".to!string ~ "s&until=-60s&"
             ~ "format=raw&target=" ~ encodeComponent(query);
         auto response = requestHTTP(url);
         auto content = response.bodyReader.readAllUTF8;
