@@ -115,8 +115,8 @@ version (Posix) class SysLogger : Logger
 
     override void beginLine(ref LogLine info) @trusted
     {
-        static assert(LogLevel.fatal - LogLevel.debugV == 7);
-        prio = 7 - (max(info.level, LogLevel.debugV) - LogLevel.debugV);
+        static immutable ubyte[] prios = syslogPrios;
+        prio = prios[info.level - LogLevel.min];
     }
 
     override void put(scope const(char)[] text) @trusted
@@ -136,6 +136,29 @@ version (Posix) class SysLogger : Logger
     }
 
 private:
+    private static ubyte[] syslogPrios()
+    {
+        import std.traits : EnumMembers;
+
+        auto res = new ubyte[](LogLevel.none - LogLevel.min);
+        foreach (level; EnumMembers!LogLevel)
+        {
+            ubyte prio;
+            with(LogLevel) final switch (level)
+            {
+            case trace, debugV, debug_, diagnostic: prio = 7; break;
+            case info: prio = 6; break;
+            case warn: prio = 4; break;
+            case error: prio = 3; break;
+            case critical: prio = 2; break;
+            case fatal: prio = 0; break;
+            case none: continue;
+            }
+            res[level - LogLevel.min] = prio;
+        }
+        return res;
+    }
+
     int prio;
     const char* _identifier;
     Appender!(char[]) buf;
