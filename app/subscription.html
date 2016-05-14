@@ -1,6 +1,6 @@
 <div class="row">
   <select class="two columns" name="type" [(ngModel)]="subscription.type">
-    <option *ngFor="#nc of notificationChannels" [value]="nc" [selected]="nc == subscription.type">{{nc}}</option>
+    <option *ngFor="let nc of notificationChannels" [value]="nc" [selected]="nc == subscription.type">{{nc}}</option>
   </select>
   <input class="eight columns" type="text" [(ngModel)]="subscription.value">
   <ng-content></ng-content>

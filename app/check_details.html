@@ -6,7 +6,7 @@
   <label for="query">Query</label>
   <div class="row">
     <select class="two columns" name="type" [ngModel]="check.dataSource" (ngModelChange)="updateDataSource($event)">
-      <option *ngFor="#ds of dataSources" [value]="ds" [selected]="ds == check.dataSource">{{ds}}</option>
+      <option *ngFor="let ds of dataSources" [value]="ds" [selected]="ds == check.dataSource">{{ds}}</option>
     </select>
     <input class="ten columns" type="text" [ngModel]="check.query" (ngModelChange)="updateQuery($event)">
   </div>
@@ -26,7 +26,7 @@
     </div>
   </div>
   <label for="subscriptions[]">Subscriptions</label>
-  <subscription *ngFor="#s of check.subscriptions" [subscription]="s">
+  <subscription *ngFor="let s of check.subscriptions" [subscription]="s">
     <input class="one column u-pull-right" type="button" value="✖" title="remove" (click)="deleteSubscription(s)">
   </subscription>
   <subscription [subscription]="newSubscription" (keydown.enter)="addSubscription($event)">

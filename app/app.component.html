@@ -7,7 +7,7 @@
     <input type="search" placeholder="Filter" [(ngModel)]="filterExpr">
   </div>
 </div>
-<check *ngFor="#c of checks | matchChecks:filterExpr"
+<check *ngFor="let c of checks | matchChecks:filterExpr"
        [check]="c"
        [selected]="c.selected"
        (saveCheck)="saveCheck($event)"
