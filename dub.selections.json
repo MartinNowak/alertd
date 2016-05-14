@@ -1,14 +1,14 @@
 {
 	"fileVersion": 1,
 	"versions": {
-		"libevent": "2.0.1+2.0.16",
-		"libev": "5.0.0+4.04",
-		"openssl": "1.1.4+1.0.1g",
-		"botan": "1.12.4",
-		"memutils": "0.4.4",
-		"vibe-d": "0.7.28",
+		"botan": "1.12.5",
+		"botan-math": "1.0.2",
 		"d2sqlite3": "0.9.7",
-		"libasync": "0.7.8",
-		"botan-math": "1.0.2"
+		"libasync": "0.7.9",
+		"libev": "5.0.0+4.04",
+		"libevent": "2.0.1+2.0.16",
+		"memutils": "0.4.5",
+		"openssl": "1.1.4+1.0.1g",
+		"vibe-d": "0.7.28"
 	}
 }
