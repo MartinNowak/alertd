@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive,
-        ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform} from 'angular2/core';
+        ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform} from '@angular/core';
 import {Backend, Check as BackendCheck, Serie, Subscription} from './backend.service'
-import 'ng2-highcharts/ng2-highcharts'
+import {Http, HTTP_PROVIDERS} from '@angular/http';
+import {Chart} from 'highcharts';
 
 //==============================================================================
 // Highcharts
@@ -13,8 +14,8 @@ import 'ng2-highcharts/ng2-highcharts'
 export class Ng2Highcharts2 {
 
     // http://api.highcharts.com/highcharts#colors
-    const colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9',
-                    '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
+    colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9',
+              '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
 
     constructor(private _ele: ElementRef) {}
 
@@ -23,18 +24,18 @@ export class Ng2Highcharts2 {
 	    this.chart.destroy();
 	}
         opt['chart']['renderTo'] = this._ele.nativeElement;
-	this.chart = new Highcharts.Chart(opt);
+	this.chart = new Chart(opt);
         this.chart.showLoading();
     }
 
-    @Input() set data(data: HighchartsIndividualSeriesOptions[]) {
+    @Input() set data(data: HighchartsLineChartSeriesOptions[]) {
         if (!data) return;
 
         const redraw = true;
         while (this.chart.series.length)
             this.chart.series[0].remove(!redraw);
         for (var i = 0; i < data.length; ++i) {
-            data[i].color = colors[i % colors.length];
+            data[i].color = this.colors[i % this.colors.length];
             this.chart.addSeries(data[i], !redraw, false);
         }
         this.chart.redraw();
@@ -61,8 +62,7 @@ export class Ng2Highcharts2 {
         });
     }
 
-    @Output() minMaxChange: EventEmitter<[number, number]> = new EventEmitter();
-
+    @Output() minMaxChange = new EventEmitter<[number, number]>();
     private chart: HighchartsChartObject;
 }
 
@@ -98,10 +98,10 @@ var dataSources: string[];
 })
 class CheckDetails {
     @Input() check: Check;
-    @Output() saveCheck: EventEmitter<Check> = new EventEmitter();
+    @Output() saveCheck = new EventEmitter<Check>();
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
 
-    chartData: HighchartsIndividualSeriesOptions[];
+    chartData: HighchartsLineChartSeriesOptions[];
     msg: string = '';
     min: number;
     max: number;
@@ -236,9 +236,9 @@ class CheckDetails {
 class CheckComponent {
     @Input() check: Check;
     @Input() selected: boolean;
-    @Output() saveCheck: EventEmitter<Check> = new EventEmitter();
-    @Output() removeCheck: EventEmitter<Check> = new EventEmitter();
-    @Output() toggleSelect: EventEmitter<Check> = new EventEmitter();
+    @Output() saveCheck = new EventEmitter<Check>();
+    @Output() removeCheck = new EventEmitter<Check>();
+    @Output() toggleSelect = new EventEmitter<Check>();
 
     private remove(e: MouseEvent) {
         e.stopPropagation();
@@ -253,8 +253,7 @@ class CheckComponent {
 // See http://bit.ly/1n9ZVd5 for why this is marked as impure
 @Pipe({name: 'matchChecks', pure: false})
 export class MatchChecks implements PipeTransform {
-    transform(value: any, args: any[]): Check[] {
-        var checks = <Check[]>value, pattern = <string>args[0];
+    transform(checks: Check[], pattern: string): Check[] {
         var words = pattern.trim().toLowerCase().split(/\s+/);
         return checks.filter(c => {
             const name = c.name.toLowerCase();
@@ -303,13 +302,13 @@ export class AppComponent {
     }
 
     removeCheck(c: Check): void {
-        this._backend.removeCheck(c).subscribe((success, err) => {
-            if (success) {
+        this._backend.removeCheck(c).subscribe(res => {
+            if (res[0]) {
                 var idx = this.checks.indexOf(c);
                 this.checks.splice(idx, 1);
                 this.markDirty();
             } else {
-                console.log(err); // TODO: flash error
+                console.log(res[1]); // TODO: flash error
             }
         });
     }

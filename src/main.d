@@ -18,7 +18,7 @@ void main(string[] args)
     auto settings = new HTTPServerSettings;
     settings.bindAddresses = ["localhost"];
     string dbPath = "alertd.db";
-    string publicPath = "public";
+    string publicPath = "dist";
     settings.port = 8080;
     bool verbose;
 
@@ -52,12 +52,19 @@ void main(string[] args)
     static AlertdAPI api;
     api = new AlertdAPI(db, cfg);
 
+    void index(HTTPServerRequest req, HTTPServerResponse res)
+    {
+        import vibe.stream.wrapper : StreamOutputRange;
+        import std.array : replaceInto;
+
+        auto initData = api.initData.serializeToJsonString;
+        auto index = cast(char[]) readFile(joinPath(publicPath, "index.html"));
+        replaceInto(StreamOutputRange(res.bodyWriter), index, "${INIT_DATA}", initData);
+    }
+
     auto router = new URLRouter;
     router.registerRestInterface(api);
-    router.get("/", (req, res) {
-        auto initData = api.initData.serializeToJsonString;
-        res.render!("index.dt", initData);
-    });
+    router.get("/", &index);
     router.get("*", serveStaticFiles(publicPath));
     listenHTTP(settings, router);
 

@@ -1,6 +1,11 @@
-import 'angular2/bundles/angular2-polyfills';
+import '@angular/platform-browser';
+import '@angular/platform-browser-dynamic';
+import '@angular/core';
+import '@angular/http';
 
-import 'angular2/platform/browser';
-import 'angular2/core';
-import 'angular2/http';
-//import 'angular2/router';
+import 'rxjs';
+
+import 'highcharts';
+import 'skeleton-css/css/normalize.css'
+import 'skeleton-css/css/skeleton.css'
+import '../fonts/raleway.css'

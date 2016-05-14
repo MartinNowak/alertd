@@ -2,7 +2,8 @@ alertd
 alertd.sqlite
 alertd.json
 build/
-public/
+dist/
+typings/
 sqlite3.o
 
 # Created by https://www.gitignore.io/api/d,node,bower
