@@ -533,7 +533,7 @@ private:
 
     static void runCommand(string command, string message, in string[string] env)
     {
-        import std.process;
+        import std.process, std.process : Config;
 
         logInfo("Running %s with env %-(%s='%s'%| %).", command, env);
         enum redirect = Redirect.stdin | Redirect.stdout | Redirect.stderrToStdout;
