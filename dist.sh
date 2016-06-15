@@ -14,7 +14,9 @@ if [ ! -f sqlite3.o ]; then
     rm -rf sqlite-amalgamation-3110000.zip sqlite-amalgamation-3110000
 fi
 $DUB build --build=$BUILD
-strip alertd
+if [ $BUILD = release ]; then
+    strip alertd
+fi
 
 ver=$(git describe)
 name=alertd-${ver#v}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)
