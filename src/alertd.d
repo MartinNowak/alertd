@@ -569,10 +569,11 @@ private:
     void armCheck(int checkID)
     {
         void doCheck()
+        void reCheck()
         {
             auto c = _checks.find(checkID);
             auto res = runCheck(c.dataSource, c.query, c.threshold);
-            logInfo("%s -> %s", c.name, res[0]);
+            logInfo("%s (recheck) -> %s", c.name, res[0]);
             if (res[0] != c.state)
             {
                 c.state = res[0];
@@ -580,6 +581,15 @@ private:
                 if (res[0] == State.error)
                     runNotifications(c, res[1 .. $]);
             }
+        }
+
+        void doCheck()
+        {
+            auto c = _checks.find(checkID);
+            auto res = runCheck(c.dataSource, c.query, c.threshold);
+            logInfo("%s -> %s", c.name, res[0]);
+            if (res[0] != c.state)
+                setTimer(30.seconds, &reCheck);
         }
 
         assert(checkID !in _checkJobs);
