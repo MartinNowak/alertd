@@ -568,7 +568,8 @@ private:
 
     void armCheck(int checkID)
     {
-        void doCheck()
+        enum Interval = 1.minutes;
+
         void reCheck()
         {
             auto c = _checks.find(checkID);
@@ -589,15 +590,15 @@ private:
             auto res = runCheck(c.dataSource, c.query, c.threshold);
             logInfo("%s -> %s", c.name, res[0]);
             if (res[0] != c.state)
-                setTimer(30.seconds, &reCheck);
+                setTimer(Interval / 2, &reCheck);
         }
 
         assert(checkID !in _checkJobs);
         // TODO: make interval configurable
         import std.random;
 
-        _checkJobs[checkID] = setTimer(uniform(0, 60).seconds, {
-            _checkJobs[checkID].rearm(1.minutes, true);
+        _checkJobs[checkID] = setTimer(uniform(0, Interval.total!"seconds").seconds, {
+            _checkJobs[checkID].rearm(Interval, true);
             doCheck();
         });
     }
