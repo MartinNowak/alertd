@@ -1,11 +1,12 @@
 {
 	"fileVersion": 1,
 	"versions": {
-		"botan": "1.12.7",
-		"botan-math": "1.0.3",
-		"d2sqlite3": "0.9.7",
+		"d2sqlite3": "0.9.8",
+		"diet-ng": "1.1.0",
 		"libasync": "0.7.9",
-		"memutils": "0.4.7",
-		"vibe-d": "0.7.30-rc.1"
+		"libevent": "2.0.1+2.0.16",
+		"memutils": "0.4.8",
+		"openssl": "1.1.5+1.0.1g",
+		"vibe-d": "0.7.30"
 	}
 }
