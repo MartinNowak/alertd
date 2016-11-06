@@ -5,6 +5,7 @@ build/
 dist/
 typings/
 sqlite3.o
+sqlite-amalgamation-3110000.zip
 
 # Created by https://www.gitignore.io/api/d,node,bower
 
