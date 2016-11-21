@@ -284,14 +284,20 @@ class Graphite : DataSource
             import std.range : chunks;
 
             Serie s;
-            long beg, end;
-            uint step;
             auto parts = line.findSplit("|");
             enforceHTTP(parts[1] == "|", HTTPStatus.internalServerError,
                 "Failed to parse graphite response.\n" ~ line);
-            enforceHTTP(formattedRead(parts[0], "%s,%s,%s,%s", &s.name, &beg,
-                &end, &step) == 4, HTTPStatus.internalServerError,
-                "Failed to parse graphite response.\n" ~ line);
+
+            // parse reverse, b/c name can contain ','
+            auto desc = parts[0].splitter(',');
+            immutable step = desc.back.to!uint;
+            desc.popBack;
+            immutable end = desc.back.to!long;
+            desc.popBack;
+            auto beg = desc.back.to!long;
+            desc.popBack;
+            immutable nameLen = desc.back.ptr + desc.back.length - parts[0].ptr;
+            s.name = parts[0][0 .. nameLen];
 
             immutable count = (end - beg) / step;
             immutable chunkSize = (maxDataPoints == -1 || maxDataPoints > count) ? 1 : count / maxDataPoints;
