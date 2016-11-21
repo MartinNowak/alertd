@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive,
         ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform} from '@angular/core';
 import {Backend, Check as BackendCheck, Serie, Subscription} from './backend.service'
 import {Http, HTTP_PROVIDERS} from '@angular/http';
+import {Control} from '@angular/common';
 import {Chart} from 'highcharts';
 
 //==============================================================================
@@ -100,6 +101,7 @@ class CheckDetails {
     @Input() check: Check;
     @Output() saveCheck = new EventEmitter<Check>();
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
+    queryControl: Control = new Control('');
 
     chartData: HighchartsLineChartSeriesOptions[];
     msg: string = '';
@@ -146,11 +148,6 @@ class CheckDetails {
         this.saveCheck.emit(this.check);
     }
 
-    private updateQuery(query: string) {
-        this.check.query = query;
-        this.reloadData();
-    }
-
     private updateDataSource(dataSource: string) {
         this.check.dataSource = dataSource;
         this.reloadData();
@@ -162,6 +159,8 @@ class CheckDetails {
 
     ngOnInit() {
         this.check.threshold = parseFloat(this.check.threshold.toFixed(1));
+        this.queryControl.valueChanges.debounceTime(400)
+            .subscribe(_ => this.reloadData());
     }
 
     ngOnChanges() {

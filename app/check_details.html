@@ -8,7 +8,7 @@
     <select class="two columns" name="type" [ngModel]="check.dataSource" (ngModelChange)="updateDataSource($event)">
       <option *ngFor="let ds of dataSources" [value]="ds" [selected]="ds == check.dataSource">{{ds}}</option>
     </select>
-    <input class="ten columns" type="text" [ngModel]="check.query" (ngModelChange)="updateQuery($event)">
+    <input class="ten columns" type="text" [(ngModel)]="check.query" [ngFormControl]="queryControl">
   </div>
   <div class="flex">
     <highcharts #h class="chart chart-wrapper" [options]="chartOptions" [data]="chartData" [threshold]="check.threshold" [msg]="msg"
