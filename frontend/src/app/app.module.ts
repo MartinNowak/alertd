@@ -1,20 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import { AppComponent, CheckDetails, Ng2Highcharts2, SubscriptionComponent, CheckComponent, MatchChecks } from './app.component';
+import { Backend } from './backend.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    CheckDetails,
+    Ng2Highcharts2,
+    SubscriptionComponent,
+    AppComponent,
+    CheckComponent,
+    MatchChecks,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule, // for [formControl] FormControlDirective
     HttpModule
   ],
-  providers: [],
+  providers: [Backend],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

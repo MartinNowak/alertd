@@ -5,31 +5,17 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import {Observable} from 'rxjs/Observable';
 import {ScalarObservable} from 'rxjs/observable/ScalarObservable';
-
-export interface Check {
-    id?: number,
-    name: string,
-    dataSource: string,
-    query: string,
-    threshold: number,
-    state: string,
-    subscriptions: Subscription[]
-}
-
-export interface Serie {
-    name: string,
-    data: [number, number][]
-}
-
-export interface Subscription {
-    type: string,
-    value: string
-}
+import {InitData, Check, Subscription, Serie} from './api'
 
 @Injectable()
 export class Backend {
 
     constructor(private _http: Http) {
+    }
+
+    getInitData() {
+        var url = 'api/init_data';
+        return this._http.get(url).map(res => <InitData>res.json());
     }
 
     saveCheck(c: Check) {

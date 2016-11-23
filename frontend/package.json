@@ -23,10 +23,13 @@
     "core-js": "^2.4.1",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.23"
+    "zone.js": "^0.6.23",
+    "highcharts": "^5.0.2",
+    "skeleton-css": "^2.0.4"
   },
   "devDependencies": {
     "@angular/compiler-cli": "^2.1.0",
+    "@types/highcharts": "^4.2.41",
     "@types/jasmine": "^2.2.30",
     "@types/node": "^6.0.42",
     "angular-cli": "1.0.0-beta.20-4",
