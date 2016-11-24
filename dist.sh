@@ -9,7 +9,7 @@ cd /vagrant
 
 cd frontend
 npm install
-ng build --prod --aot
+./node_modules/.bin/ng build --prod --aot
 cd ..
 
 source \$(curl -fsS https://dlang.org/install.sh | bash -s dmd-2.072.0 --activate)
