@@ -281,12 +281,10 @@ export class AppComponent {
     filterExpr: string = '';
 
     constructor(private _backend: Backend, private _changeDetector: ChangeDetectorRef) {
-        this._backend.getInitData().subscribe(initData => {
-            dataSources = initData.data_sources;
-            notificationChannels = initData.notification_channels;
-            this.checks = initData.checks;
-            this.markDirty();
-        });
+        var initData = _backend.initData
+        dataSources = initData.data_sources;
+        notificationChannels = initData.notification_channels;
+        this.checks = initData.checks;
     }
 
     addCheck(): void {
