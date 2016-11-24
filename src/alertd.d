@@ -341,9 +341,18 @@ struct Subscription
     string type, value;
 }
 
+struct InitData
+{
+    string[] data_sources, notification_channels;
+    Check[] checks;
+}
+
 @path("/api")
 interface IAlertdAPI
 {
+    @path("init_data")
+    InitData getInitData();
+
     @path("checks")
     Check createCheck(string name, string dataSource, string query,
         float threshold, Subscription[] subscriptions = null);
@@ -398,14 +407,8 @@ final class AlertdAPI : IAlertdAPI
             armCheck(c.id);
     }
 
-    auto initData()
+    InitData getInitData()
     {
-        static struct InitData
-        {
-            string[] data_sources, notification_channels;
-            Check[] checks;
-        }
-
         return InitData(_dataSources.keys, _channels.keys, _checks.all);
     }
 

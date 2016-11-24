@@ -4,7 +4,7 @@
 <div class="row">
   <button style="padding: 0" class="two columns" (click)="addCheck()">Add Check</button>
   <div class="three columns">
-    <input type="search" placeholder="Filter" [(ngModel)]="filterExpr">
+    <input type="search" placeholder="Filter" [(ngModel)]="filterExpr" [ngModelOptions]="{standalone: true}">
   </div>
 </div>
 <check *ngFor="let c of checks | matchChecks:filterExpr"

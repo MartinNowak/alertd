@@ -1,28 +1,29 @@
 <form (ngSubmit)="save()">
   <div class="row">
     <label for="name">Name</label>
-    <input required type="text" class="u-full-width" [(ngModel)]="check.name">
+    <input required type="text" name="check.name" class="u-full-width" [(ngModel)]="check.name">
   </div>
   <label for="query">Query</label>
   <div class="row">
-    <select class="two columns" name="type" [ngModel]="check.dataSource" (ngModelChange)="updateDataSource($event)">
+    <select class="two columns" name="check.dataSource" [ngModel]="check.dataSource" (ngModelChange)="updateDataSource($event)">
       <option *ngFor="let ds of dataSources" [value]="ds" [selected]="ds == check.dataSource">{{ds}}</option>
     </select>
-    <input class="ten columns" type="text" [(ngModel)]="check.query" [ngFormControl]="queryControl">
+    <input class="ten columns" name="check.query" type="text" [(ngModel)]="check.query" [formControl]="queryControl">
   </div>
   <div class="flex">
     <highcharts #h class="chart chart-wrapper" [options]="chartOptions" [data]="chartData" [threshold]="check.threshold" [msg]="msg"
                 (minMaxChange)="minMaxChange($event)">
     </highcharts>
     <div class="flex chart-controls">
-      <input type="range"
+      <input name="check.threshold"
+             type="range"
              [ngModel]="check.threshold"
              (ngModelChange)="check.threshold = toFloat($event, 1)"
              [min]="min"
              [max]="max"
              step=0.1
              orient="vertical">
-      <input type="number" [(ngModel)]="check.threshold" step=0.1>
+      <input name="check.threshold" type="number" [(ngModel)]="check.threshold" step=0.1>
     </div>
   </div>
   <label for="subscriptions[]">Subscriptions</label>

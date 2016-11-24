@@ -1,9 +1,11 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive,
         ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform} from '@angular/core';
-import {Backend, Check as BackendCheck, Serie, Subscription} from './backend.service'
-import {Http, HTTP_PROVIDERS} from '@angular/http';
-import {Control} from '@angular/common';
+import {Backend} from './backend.service'
+import {Check as BackendCheck, Subscription, Serie} from './api'
+import {Http} from '@angular/http';
+import {FormControl, Validators} from '@angular/forms';
 import {Chart} from 'highcharts';
+import 'rxjs/add/operator/debounceTime';
 
 //==============================================================================
 // Highcharts
@@ -20,7 +22,7 @@ export class Ng2Highcharts2 {
 
     constructor(private _ele: ElementRef) {}
 
-    @Input() set options(opt: HighchartsOptions) {
+    @Input() private set options(opt: Highcharts.Options) {
 	if (this.chart) {
 	    this.chart.destroy();
 	}
@@ -29,7 +31,7 @@ export class Ng2Highcharts2 {
         this.chart.showLoading();
     }
 
-    @Input() set data(data: HighchartsLineChartSeriesOptions[]) {
+    @Input() private set data(data: Highcharts.LineChartSeriesOptions[]) {
         if (!data) return;
 
         const redraw = true;
@@ -64,7 +66,7 @@ export class Ng2Highcharts2 {
     }
 
     @Output() minMaxChange = new EventEmitter<[number, number]>();
-    private chart: HighchartsChartObject;
+    private chart: Highcharts.ChartObject;
 }
 
 //==============================================================================
@@ -75,9 +77,9 @@ var notificationChannels: string[];
 
 @Component({
     selector: 'subscription',
-    template: require('./subscription.html'),
+    templateUrl: './subscription.html',
 })
-class SubscriptionComponent {
+export class SubscriptionComponent {
     @Input() subscription: Subscription = {type: notificationChannels[0], value: ""};
 
     private get notificationChannels(): string[] {
@@ -93,21 +95,20 @@ var dataSources: string[];
 
 @Component({
     selector: 'check-details',
-    styles: [require('./check_details.css')],
-    template: require('./check_details.html'),
-    directives: [SubscriptionComponent, Ng2Highcharts2]
+    styleUrls: ['./check_details.css'],
+    templateUrl: './check_details.html'
 })
-class CheckDetails {
+export class CheckDetails {
     @Input() check: Check;
     @Output() saveCheck = new EventEmitter<Check>();
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
-    queryControl: Control = new Control('');
+    queryControl = new FormControl();
 
-    chartData: HighchartsLineChartSeriesOptions[];
+    private chartData: Highcharts.LineChartSeriesOptions[];
     msg: string = '';
     min: number;
     max: number;
-    chartOptions: HighchartsOptions = {
+    private chartOptions: Highcharts.Options = {
         title: {
             text: '',
             style: '{display: none;}'
@@ -221,7 +222,7 @@ class CheckDetails {
 
 @Component({
     selector: 'check',
-    styles: [require('./check.css')],
+    styleUrls: ['./check.css'],
     template: `
         <div class="bar row" (click)="toggleSelect.emit(check)">
           <div class="two columns text-align-center" [ngClass]="{error: check.state == 'error', ok: check.state == 'ok'}">{{check.state}}</div>
@@ -230,9 +231,8 @@ class CheckDetails {
         </div>
         <check-details *ngIf="selected" [check]="check" (saveCheck)="saveCheck.emit($event)"></check-details>
         `,
-    directives: [CheckDetails]
 })
-class CheckComponent {
+export class CheckComponent {
     @Input() check: Check;
     @Input() selected: boolean;
     @Output() saveCheck = new EventEmitter<Check>();
@@ -265,17 +265,15 @@ export class MatchChecks implements PipeTransform {
 // App
 //==============================================================================
 
-interface Check extends BackendCheck {
+export interface Check extends BackendCheck {
     selected?: boolean;
 }
 
 @Component({
-    selector: 'app',
+    selector: 'app-root',
     styles: [`.header { margin-top: 8rem; text-align: center; }`,
             `check { display: block; margin-top: .75rem; }`],
-    template: require('./app.component.html'),
-    directives: [CheckComponent],
-    pipes: [MatchChecks],
+    templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
@@ -283,7 +281,7 @@ export class AppComponent {
     filterExpr: string = '';
 
     constructor(private _backend: Backend, private _changeDetector: ChangeDetectorRef) {
-        var initData = JSON.parse(document.getElementById('init-data').innerText);
+        var initData = _backend.initData
         dataSources = initData.data_sources;
         notificationChannels = initData.notification_channels;
         this.checks = initData.checks;
