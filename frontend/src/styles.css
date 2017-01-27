@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/skeleton-css/css/normalize.css';
 @import '../node_modules/skeleton-css/css/skeleton.css';
-@import '../fonts/raleway.css';
+
+/* Override Raleway from Skeleton with system fonts. */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
