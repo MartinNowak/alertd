@@ -12,7 +12,7 @@ npm install
 ./node_modules/.bin/ng build --prod --aot
 cd ..
 
-source \$(curl -fsS https://dlang.org/install.sh | bash -s dmd-2.072.0 --activate)
+source \$(curl -fsS https://dlang.org/install.sh | bash -s dmd-2.074.0 --activate)
 
 dub build --build=release
 strip alertd
