@@ -9,7 +9,8 @@ Vagrant.configure("2") do |config|
   end
   config.vm.synced_folder ".", "/vagrant"
   config.vm.provision "shell", inline: <<-SHELL
+    curl -sL https://deb.nodesource.com/setup_6.x | bash -
     apt-get update -qq
-    apt-get install -qq npm nodejs-legacy unzip gcc libevent-dev libssl-dev --no-install-recommends
+    apt-get install -qq nodejs unzip gcc libevent-dev libssl-dev --no-install-recommends
   SHELL
 end

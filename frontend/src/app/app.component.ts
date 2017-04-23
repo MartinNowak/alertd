@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive,
-        ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform} from '@angular/core';
+        ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform, SimpleChanges} from '@angular/core';
 import {Backend} from './backend.service'
 import {Check as BackendCheck, Subscription, Serie} from './api'
 import {Http} from '@angular/http';
@@ -22,7 +22,7 @@ export class Ng2Highcharts2 {
 
     constructor(private _ele: ElementRef) {}
 
-    @Input() private set options(opt: Highcharts.Options) {
+    @Input() set options(opt: Highcharts.Options) {
 	if (this.chart) {
 	    this.chart.destroy();
 	}
@@ -31,7 +31,7 @@ export class Ng2Highcharts2 {
         this.chart.showLoading();
     }
 
-    @Input() private set data(data: Highcharts.LineChartSeriesOptions[]) {
+    @Input() set data(data: Highcharts.LineChartSeriesOptions[]) {
         if (!data) return;
 
         const redraw = true;
@@ -82,8 +82,8 @@ var notificationChannels: string[];
 export class SubscriptionComponent {
     @Input() subscription: Subscription = {type: notificationChannels[0], value: ""};
 
-    private get notificationChannels(): string[] {
-        return notificationChannels;
+    get notificationChannels(): string[] {
+      return notificationChannels;
     }
 }
 
@@ -100,15 +100,15 @@ var dataSources: string[];
 })
 export class CheckDetails {
     @Input() check: Check;
-    @Output() saveCheck = new EventEmitter<Check>();
+  @Output() saveCheck: EventEmitter<Check> = new EventEmitter<Check>();
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
     queryControl = new FormControl();
 
-    private chartData: Highcharts.LineChartSeriesOptions[];
+    chartData: Highcharts.LineChartSeriesOptions[];
     msg: string = '';
     min: number;
     max: number;
-    private chartOptions: Highcharts.Options = {
+    chartOptions: Highcharts.Options = {
         title: {
             text: '',
             style: '{display: none;}'
@@ -149,12 +149,12 @@ export class CheckDetails {
         this.saveCheck.emit(this.check);
     }
 
-    private updateDataSource(dataSource: string) {
+    updateDataSource(dataSource: string) {
         this.check.dataSource = dataSource;
         this.reloadData();
     }
 
-    private get dataSources() {
+    get dataSources() {
         return dataSources;
     }
 
@@ -164,7 +164,7 @@ export class CheckDetails {
             .subscribe(_ => this.reloadData());
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         this.reloadData();
     }
 
@@ -191,16 +191,16 @@ export class CheckDetails {
         console.log(error);
     }
 
-    private minMaxChange(minmax: [number, number]) {
+    minMaxChange(minmax: [number, number]) {
         this.min = minmax[0];
         this.max = minmax[1];
     }
 
-    private /*static*/ toFloat(val: string, digits: number): number {
+    /*static*/ toFloat(val: string, digits: number): number {
         return parseFloat(parseFloat(val).toFixed(digits));
     }
 
-    private addSubscription(e?: Event) {
+    addSubscription(e?: Event) {
         if (e) e.preventDefault();
         this.check.subscriptions.push(this.newSubscription);
         this.newSubscription = {type: this.newSubscription.type, value: ""};
@@ -239,7 +239,7 @@ export class CheckComponent {
     @Output() removeCheck = new EventEmitter<Check>();
     @Output() toggleSelect = new EventEmitter<Check>();
 
-    private remove(e: MouseEvent) {
+    remove(e: MouseEvent) {
         e.stopPropagation();
         this.removeCheck.emit(this.check);
     }
