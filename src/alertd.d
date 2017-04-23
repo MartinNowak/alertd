@@ -269,11 +269,19 @@ class Graphite : DataSource
         // add a 60s lag to avoid incorrect results for out-of-order collectd stats
         auto url = url ~ "/render?from=-" ~ (ago + 1.minutes).total!"seconds".to!string ~ "s&until=-60s&"
             ~ "format=raw&target=" ~ encodeComponent(query);
-        auto response = requestHTTP(url);
-        auto content = response.bodyReader.readAllUTF8;
-        enforceHTTP(response.statusCode == 200, cast(HTTPStatus) response.statusCode,
-            content);
+        Serie[] series;
+        requestHTTP(url, (scope req) {  }, (scope res) {
+            auto content = res.bodyReader.readAllUTF8;
+            enforceHTTP(res.statusCode == 200, cast(HTTPStatus) res.statusCode, content);
+            series = parseGraphite(content, maxDataPoints);
+        });
+        return series;
+    }
 
+private:
+
+    Serie[] parseGraphite(string content, int maxDataPoints = -1)
+    {
         Serie[] series;
         foreach (line; content.lineSplitter)
         {
@@ -317,7 +325,6 @@ class Graphite : DataSource
         return series;
     }
 
-private:
     string url;
 }
 
