@@ -1,14 +1,14 @@
-import { FrontendPage } from './app.po';
+import { AlertdPage } from './app.po';
 
-describe('frontend App', function() {
-  let page: FrontendPage;
+describe('alertd App', () => {
+  let page: AlertdPage;
 
   beforeEach(() => {
-    page = new FrontendPage();
+    page = new AlertdPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Welcome to app!!');
   });
 });
