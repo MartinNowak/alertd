@@ -2,8 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../dist",
+    "baseUrl": "./",
     "module": "es2015",
-    "baseUrl": "",
     "types": [
       "highcharts"
     ]
