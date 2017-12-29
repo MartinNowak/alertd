@@ -1,12 +1,12 @@
 {
 	"fileVersion": 1,
 	"versions": {
-		"d2sqlite3": "0.9.8",
+		"d2sqlite3": "0.16.0",
 		"diet-ng": "1.4.3",
 		"libasync": "0.8.3",
 		"libevent": "2.0.2+2.0.16",
 		"memutils": "0.4.9",
-		"openssl": "1.1.5+1.0.1g",
+		"openssl": "1.1.6+1.0.1g",
 		"vibe-d": "0.7.32"
 	}
 }

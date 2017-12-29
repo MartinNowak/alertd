@@ -124,7 +124,6 @@ export class CheckDetails {
         yAxis: {
             title: {
                 text: '',
-                style: '{display: none;}'
             }
         },
         plotOptions: {
