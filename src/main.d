@@ -54,7 +54,10 @@ void main(string[] args)
 
     auto router = new URLRouter;
     router.registerRestInterface(api);
-    router.get("*", serveStaticFiles(publicPath));
+    auto fsettings = new HTTPFileServerSettings;
+    fsettings.encodingFileExtension["gzip"] = ".gz";
+    router.get("*", serveStaticFiles(publicPath, fsettings));
+    settings.useCompressionIfPossible = true;
     listenHTTP(settings, router);
 
     lowerPrivileges();

@@ -11,6 +11,7 @@ cd frontend
 npm install
 ./node_modules/.bin/ng build --prod --aot
 cd ..
+gzip -9 --keep dist/*.{css,js}
 
 source \$(curl -fsS https://dlang.org/install.sh | bash -s dmd-2.076.1 --activate)
 
