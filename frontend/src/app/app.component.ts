@@ -270,8 +270,7 @@ export interface Check extends BackendCheck {
 
 @Component({
     selector: 'app-root',
-    styles: [`.header { margin-top: 8rem; text-align: center; }`,
-            `check { display: block; margin-top: .75rem; }`],
+    styles: [`check { display: block; margin-top: .75rem; }`],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
