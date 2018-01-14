@@ -297,13 +297,13 @@ export class AppComponent {
     }
 
     removeCheck(c: Check): void {
+        if (!confirm('Are you sure you want to remove this check?'))
+            return;
         this._backend.removeCheck(c).subscribe(res => {
             if (res[0]) {
                 var idx = this.checks.indexOf(c);
                 this.checks.splice(idx, 1);
                 this.markDirty();
-            } else {
-                console.log(res[1]); // TODO: flash error
             }
         });
     }
