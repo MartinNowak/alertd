@@ -100,7 +100,7 @@ var dataSources: string[];
 })
 export class CheckDetails {
     @Input() check: Check;
-  @Output() saveCheck: EventEmitter<Check> = new EventEmitter<Check>();
+    @Output() saveCheck: EventEmitter<Check> = new EventEmitter<Check>();
     newSubscription: Subscription = {type: notificationChannels[0], value: ""};
     queryControl = new FormControl();
 
@@ -225,8 +225,10 @@ export class CheckDetails {
     template: `
         <div class="bar row" (click)="toggleSelect.emit(check)">
           <div class="two columns text-align-center" [ngClass]="{error: check.state == 'error', ok: check.state == 'ok'}">{{check.state}}</div>
-          <div class="nine columns text-overflow-ellipsis">{{check.name}}</div>
+          <div class="eight columns text-overflow-ellipsis">{{check.name}}</div>
+          <!-- careful order reversed due to float right (u-pull-right) -->
           <div class="one column text-align-center u-pull-right error" (click)="remove($event)" title="remove">✖</div>
+          <div class="one column text-align-center u-pull-right error" (click)="copy($event)" title="copy">⎘</div>
         </div>
         <check-details *ngIf="selected" [check]="check" (saveCheck)="saveCheck.emit($event)"></check-details>
         `,
@@ -235,8 +237,14 @@ export class CheckComponent {
     @Input() check: Check;
     @Input() selected: boolean;
     @Output() saveCheck = new EventEmitter<Check>();
+    @Output() copyCheck = new EventEmitter<Check>();
     @Output() removeCheck = new EventEmitter<Check>();
     @Output() toggleSelect = new EventEmitter<Check>();
+
+    copy(e: MouseEvent) {
+        e.stopPropagation();
+        this.copyCheck.emit(this.check);
+    }
 
     remove(e: MouseEvent) {
         e.stopPropagation();
@@ -288,6 +296,10 @@ export class AppComponent {
     addCheck(): void {
         var c: Check = {name: 'New Check', dataSource: dataSources[0], query: null, state: 'unsaved', threshold: 0, subscriptions: [], selected: true};
         this.checks.unshift(c);
+    }
+
+    copyCheck(c: Check): void {
+        this.checks.unshift({...c, id: null, name: c.name + ' Copy', state: 'unsaved', selected: true});
     }
 
     saveCheck(c: Check): void {

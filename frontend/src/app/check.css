@@ -29,3 +29,8 @@ check-details {
 
 .error { background-color: #D9534F }
 .ok { background-color: #5CB85C }
+
+.u-pull-right:not(:last-of-type) {
+  margin-left: 0;
+  border-left: 1px solid #B12520;
+}
