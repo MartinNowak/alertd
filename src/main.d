@@ -76,7 +76,7 @@ struct LogConfig
     @byName Destination destination = Destination.stdout_stderr;
     @optional @byName LogLevel level = LogLevel.info;
     @optional string path = "alertd.log";
-    @optional @byName SyslogLogger.Facility facility = SyslogLogger.Facility.user;
+    @optional @byName SysLogger.Facility facility = SysLogger.Facility.user;
 
     shared(Logger) createLogger(bool verbose)
     {
@@ -104,9 +104,11 @@ struct LogConfig
 
 version (Posix) class SysLogger : Logger
 {
-    import core.sys.posix.syslog;
+    import core.sys.posix.syslog : closelog, openlog, syslog, LOG_CONS, LOG_PID;
 
-    this(string identifier, SyslogLogger.Facility facility)
+    alias Facility = SyslogLogger!OutputStream.Facility;
+
+    this(string identifier, Facility facility)
     {
         _identifier = toStringz(identifier);
         openlog(_identifier, LOG_PID | LOG_CONS, facility);

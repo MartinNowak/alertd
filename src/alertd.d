@@ -38,7 +38,7 @@ private:
     }
 }
 
-struct Subscriptions
+@safe struct Subscriptions
 {
     string json;
     alias json this;
