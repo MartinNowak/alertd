@@ -1,26 +1,20 @@
 #!/bin/sh
 
-set -ueo pipefail
+set -xue
 
-vagrant up
+cd frontend && npm install && ./node_modules/.bin/ng build --prod --aot && cd ..
+gzip -9 --keep dist/*.css dist/*.js
 
-cat | vagrant ssh --command 'bash -s -' <<EOF
-cd /vagrant
-
-cd frontend
-npm install
-./node_modules/.bin/ng build --prod --aot
-cd ..
-gzip -9 --keep dist/*.{css,js}
-
-source \$(curl -fsS https://dlang.org/install.sh | bash -s dmd-2.076.1 --activate)
+. ~/dlang/*/activate
 
 dub build --build=release
 strip alertd
 
 ver=$(git describe)
-name=alertd-\${ver#v}-\$(uname -s | tr '[:upper:]' '[:lower:]')-\$(uname -m)
-tar --exclude='*.map' --transform "s|^|\$name/|" -Jcf \$name.tar.xz alertd alertd.sample.json dist/
-EOF
+name=alertd-${ver#v}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)
+tar --exclude='*.map' --transform "s|^|$name/|" -Jcf $name.tar.xz alertd alertd.sample.json dist/
 
-vagrant destroy -f
+echo 'Build finished, run the following command to grab the tar archive.'
+echo "  docker cp $HOSTNAME:$PWD/$name.tar.xz ."
+echo 'Press Enter to exit container'
+read _
