@@ -1,6 +1,6 @@
-FROM node as build
+FROM node:10-jessie
 
-ARG LDC_VERSION=1.7.0
+ARG LDC_VERSION=1.12.0
 
 WORKDIR /src
 RUN curl -fsS https://dlang.org/install.sh | bash -s ldc-$LDC_VERSION
