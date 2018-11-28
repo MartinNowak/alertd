@@ -1,3 +1,5 @@
+
+import {debounceTime} from 'rxjs/operators';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive,
         ElementRef, EventEmitter, Input, Output, Pipe, PipeTransform, SimpleChanges} from '@angular/core';
 import {Backend} from './backend.service'
@@ -5,7 +7,7 @@ import {Check as BackendCheck, Subscription, Serie} from './api'
 import {Http} from '@angular/http';
 import {FormControl, Validators} from '@angular/forms';
 import {Chart} from 'highcharts';
-import 'rxjs/add/operator/debounceTime';
+
 
 //==============================================================================
 // Highcharts
@@ -159,7 +161,7 @@ export class CheckDetails {
 
     ngOnInit() {
         this.check.threshold = parseFloat(this.check.threshold.toFixed(1));
-        this.queryControl.valueChanges.debounceTime(400)
+        this.queryControl.valueChanges.pipe(debounceTime(400))
             .subscribe(_ => this.reloadData());
     }
 
