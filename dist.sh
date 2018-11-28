@@ -3,7 +3,7 @@
 set -xue
 
 cd frontend
-npm install
+yarn install
 # substitute html import with app-root template for fast preloading
 sed -i -e '/<link rel="import" [^>]*>/r src/app/app.component.html' -e '/<link rel="import" [^>]*>/d' src/index.html
 ./node_modules/.bin/ng build --prod --aot
