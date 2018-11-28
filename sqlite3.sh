@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ ! -f sqlite3.o ]; then
-    wget -c https://www.sqlite.org/2016/sqlite-amalgamation-3110000.zip
-    unzip -o sqlite-amalgamation-3110000.zip sqlite-amalgamation-3110000/sqlite3.c
-    cc -O2 -c -fPIC sqlite-amalgamation-3110000/sqlite3.c
-    rm -rf sqlite-amalgamation-3110000
+    wget -c https://www.sqlite.org/2018/sqlite-autoconf-3250300.tar.gz
+    tar -zxf sqlite-autoconf-3250300.tar.gz
+    cc -O2 -c -fPIC sqlite-autoconf-3250300/sqlite3.c
+    rm -rf sqlite-autoconf-3250300
 fi

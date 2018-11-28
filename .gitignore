@@ -5,7 +5,7 @@ build/
 dist/
 typings/
 sqlite3.o
-sqlite-amalgamation-3110000.zip
+sqlite-autoconf-3250300.tar.gz
 
 # Created by https://www.gitignore.io/api/d,node,vagrant
 
